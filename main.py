@@ -1,6 +1,14 @@
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
+'''
+TODO:
+- Scrap Likes, Overall Grade
+- Add Confidence Precentage
+- Credits System
+- (Buying Option?)
+'''
+
 print('Please enter what would you like to look for:')
 userWanted = input()
 constructed = 'https://allegro.pl/listing?string=' + str(userWanted)
