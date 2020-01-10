@@ -12,6 +12,7 @@ from webbrowser import open_new
 #- Put that shit into class already
 #- Accept Spaces in 'what' input
 #- KeyboardInterrupt causes to open latest best choice
+#- Add support for multiple pages
 
 print('Please enter what would you like to look for:')
 userWanted = input()
