@@ -8,6 +8,7 @@ from webbrowser import open_new
 #- Exporting to JSON
 #- Put that shit into class already
 #- Limiting possible to select pages
+#- Checking if selected thing even has request in title
 
 print('Please enter what would you like to look for:')
 #Professional handling space before and after
@@ -132,7 +133,7 @@ try:
                 print('URL: ' + str(bestURL))
                 print('Likes: ' + str(bestLIKES))
                 print('Dislikes: ' + str(bestDISLIKES))
-                print('Price: ' + str(bestPRICE))
+                print('Price: ' + str(bestPRICE) + ' zł')
                 print('Confidence: ' + str(bestCONF)+ "/10")
                 print('\n')
 
