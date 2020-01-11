@@ -3,18 +3,28 @@ from urllib.request import Request, urlopen
 from webbrowser import open_new
 
 #TODO:
-#- Scrap Likes, Overall Grade X
-#- Add Confidence Precentage X
 #- Credits System
 #- (Buying Option?)
 #- Exporting to JSON
-#- Show best option = MAX(confidence), MIN(price)
 #- Put that shit into class already
-#- Accept Spaces in 'what' input
-#- KeyboardInterrupt causes to open latest best choice
+#- Multiple Pages
 
 print('Please enter what would you like to look for:')
+#Professional handling space before and after
+allegroSpace = '%20'
 userWanted = input()
+userWanted = userWanted.split(' ')
+if userWanted[0] is '': del userWanted[0]
+if userWanted[len(userWanted)-1] is '': del userWanted[len(userWanted)-1]
+userWanted = allegroSpace.join(userWanted)
+
+print('Enter how many pages you want to scan:')
+userPages = input()
+
+bestPRICE = 9999999
+bestCONF = 0
+bestURL = ''
+
 constructed = 'https://allegro.pl/listing?string=' + str(userWanted)
 
 url = Request(constructed, headers={'User-Agent': 'Mozilla/5.0'})
@@ -22,9 +32,6 @@ webpage = urlopen(url).read()
 web = webpage.decode('utf-8')
 soup = BeautifulSoup(web, 'html.parser')
 
-bestPRICE = 9999999
-bestCONF = 0
-bestURL = ''
 
 def getLikes(given_URL, choice):
     newURL = given_URL + '#aboutSeller'
@@ -92,26 +99,30 @@ def newBest(price,conf,url):
             bestPRICE = price
             bestURL = url
 
-for link in soup.select('a[href*=".pl/oferta"]'):
-    if link.get_text() is not '':
-        title = link.get_text()
-        href = link.get('href')
-        likes = getLikes(href,True)
-        disLikes = getLikes(href, False)
-        price = getPrice(href)
-        conf = calcConfidence(likes,disLikes)
-        newBest(price,conf,href)
-        print('Title: ' + checkNone(title))
-        print('URL: ' + checkNone(href))
-        print('Likes: ' + checkNone(likes))
-        print('Dislikes: ' + checkNone(disLikes))
-        print('Price: ' + checkNone(price))
-        print('Confidence: ' + checkNone(conf) + "/10")
-        print('---------------------------')
-        print('Best NOW:')
-        print('URL: ' + str(bestURL))
-        print('Price: ' + str(bestPRICE))
-        print('Confidence: ' + str(bestCONF))
-        print('\n')
+try:
+    for link in soup.select('a[href*=".pl/oferta"]'):
+        if link.get_text() is not '' and 'https://allegrolokalnie.pl' not in link.get('href'):
+            title = link.get_text()
+            href = link.get('href')
+            likes = getLikes(href,True)
+            disLikes = getLikes(href, False)
+            price = getPrice(href)
+            conf = calcConfidence(likes,disLikes)
+            newBest(price,conf,href)
+            print('Title: ' + checkNone(title))
+            print('URL: ' + checkNone(href))
+            print('Likes: ' + checkNone(likes))
+            print('Dislikes: ' + checkNone(disLikes))
+            print('Price: ' + checkNone(price))
+            print('Confidence: ' + checkNone(conf) + "/10")
+            print('---------------------------')
+            print('Best NOW:')
+            print('URL: ' + str(bestURL))
+            print('Price: ' + str(bestPRICE))
+            print('Confidence: ' + str(bestCONF))
+            print('\n')
 
-open_new(bestURL)
+except KeyboardInterrupt:
+    open_new(bestURL)
+else:
+    open_new(bestURL)
