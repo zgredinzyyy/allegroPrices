@@ -59,6 +59,8 @@ try:
                 disLikes = int(dislikes)
                 summed = likes + disLikes
                 confidencePoints = 0
+
+                # Rewarding confidence points for amount of Overall Rating
                 if summed >= 10000:
                     confidencePoints += 5
                 elif summed >= 5000:
@@ -70,6 +72,7 @@ try:
                 elif summed >= 100:
                     confidencePoints += 1
 
+                # Likes/Overall Rating Precentage brought to max 5
                 approvalPrecentage = round(((likes / summed) * 0.05) * 100)
                 confidencePoints += approvalPrecentage
                 return str(confidencePoints)
